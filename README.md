@@ -2,8 +2,10 @@
 
 This is a animated representation for a variation of the problem of the Dinning Philosophers.
 
+
 Authors:
 
   Laura Politi
+  
   Lucas de C. B. de Castro
   
