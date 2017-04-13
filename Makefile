@@ -1,7 +1,7 @@
 # Makefile
 
 CC=gcc
-CFLAGS=-std=c99 -Wall -pedantic -lncurses -g
+CFLAGS=-std=c99 -Wall -pedantic -lncurses -lpthread -g
 
 
 all:

@@ -33,3 +33,15 @@ int inital_message(){
     clear();
     return (int) get - '1';
 }
+
+void display(){
+    clear();
+    printw("display haha\n");
+    refresh();
+}
+
+void final_layout(){
+    clear();
+    printw("final layout xD\n");
+    refresh();
+}

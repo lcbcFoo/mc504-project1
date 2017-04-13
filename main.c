@@ -6,7 +6,7 @@
 
 int main(){
 
-    /* Initialize colors support from curses.h */
+    /* Initialize colors support from ncurses.h */
 	initscr();
 	start_color();
 

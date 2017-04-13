@@ -6,3 +6,7 @@
 *            2 for deadlock mode
 */
 int inital_message();
+
+void display();
+
+void final_layout();
