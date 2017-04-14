@@ -42,6 +42,10 @@ void display(){
     move(5, 0);
     /* Implementar os desenhos */
     for(int i = 0; i < N; i++){
+        if(pens[(i)] != -1)
+            printw("| ");
+        else
+            printw("- ");
         if(states[i] == W)
             printw("W ");
         else if(states[i] == T)
@@ -50,7 +54,6 @@ void display(){
             printw("D ");
     }
 
-
     move(25, 0);
     attron(COLOR_PAIR(1));
     printw("Questions answered:\n\n");
@@ -58,7 +61,6 @@ void display(){
         printw("Student %d: %d\n", i, questions[i]);
     }
     printw("\n\nTotal: %d\n", total_questions);
-
     refresh();
 }
 

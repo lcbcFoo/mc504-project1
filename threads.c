@@ -14,30 +14,30 @@ void think(int student_id){
 }
 
 void check_pens(int student_id){
-    if(mode == 2){ // deadlock_mode
-        if(check_left(student_id) && check_right(student_id)){
-            sem_post(&students[student_id]);
-        }
-    } else if(states[student_id] == D && states[LEFT] !=W && states[RIGHT] !=W){
+    if(states[student_id] == D && check_left(student_id) && check_right(student_id)){
         states[student_id] = W;
         display();
         sem_post(&students[student_id]);
     }
+
+    sem_post(&sem_pen);
 }
 
 int check_left(int student_id) {
-    if(pens[LEFT] == 0){
-        pens[LEFT] = 1;
+    if(pens[student_id] == -1){
+        pens[student_id] = student_id;
         display();
         sleep(1);
         return 1;
     }
+    else if(pens[student_id] == student_id)
+        return 1;
     return 0;
 }
 
 int check_right(int student_id){
-    if(pens[RIGHT] == 0){
-        pens[RIGHT] = 1;
+    if(pens[RIGHT] == -1){
+        pens[RIGHT] = student_id;
         display();
         sleep(1);
         return 1;
@@ -70,9 +70,16 @@ void writing(int student_id){
 void release_pens(int student_id){
     sem_wait(&semaphore);
     states[student_id] = T;
+
+    pens[RIGHT] = -1;
+    pens[student_id] = -1;
+
     display();
-    check_pens(LEFT);
-    check_pens(RIGHT);
+
+    if(mode == 0){
+        check_pens(LEFT);
+        check_pens(RIGHT);
+    }
     sem_post(&semaphore);
 }
 
