@@ -30,6 +30,10 @@ sem_t students[N];
 /* Semaphore for incrementing total questions */
 sem_t sem_questions;
 
+/* 0 if pen is free, 1 if pen is being used */
+int pens[N];
+int mode;
+
 /* Counters */
 int questions[N];
 int total_questions;
@@ -43,6 +47,10 @@ int writing_time[N];
 void think(int student_id);
 
 void check_pens(int student_id);
+
+int check_left(int student_id);
+
+int check_right(int student_id);
 
 void pick_pens(int student_id);
 
