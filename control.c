@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 void start_animation(){
-    int mode = inital_message();
+    mode = inital_message();
 
     if(mode == 0)
         normal_mode();
@@ -87,6 +87,7 @@ void starvation_mode(){
     sem_init(&sem_questions, 0, 1);
     total_questions = 0;
     for (i = 0; i < N; i++) {
+        pens[i] = 0;
         students_id[i] = i;
         sem_init(&students[i], 0, 0);
         states[i] = T;
