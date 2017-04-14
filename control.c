@@ -8,10 +8,16 @@
 
 void start_animation(){
     int mode = inital_message();
-    printw("mode: %d\n", mode);
+
+    if(mode == 0)
+        normal_mode();
+    else if(mode == 1)
+        starvation_mode();
+    else
+        deadlock_mode();
 
     refresh();
-    while(1);
+    starvation_mode();
 }
 
 void normal_mode(){
@@ -59,11 +65,17 @@ void starvation_mode(){
     start_delay[3] = 1;
     start_delay[4] = 2;
 
-    sleeping_time[0] = 0;
+    sleeping_time[0] = 10;
     sleeping_time[1] = 1;
     sleeping_time[2] = 3;
     sleeping_time[3] = 3;
     sleeping_time[4] = 1;
+
+    writing_time[0] = 3;
+    writing_time[1] = 3;
+    writing_time[2] = 1;
+    writing_time[3] = 1;
+    writing_time[4] = 3;
 
     pthread_t thr[N];
     int i, students_id[N];
@@ -88,21 +100,25 @@ void starvation_mode(){
 }
 
 void deadlock_mode(){
-/*  Mudar parar dar deadlock
-
-
-    start_delay[0] = 1;
-    start_delay[1] = 0;
+    start_delay[0] = 5;
+    start_delay[1] = 1;
     start_delay[2] = 3;
     start_delay[3] = 1;
-    start_delay[4] = 2;
+    start_delay[4] = 3;
 
     sleeping_time[0] = 0;
-    sleeping_time[1] = 1;
-    sleeping_time[2] = 3;
+    sleeping_time[1] = 3;
+    sleeping_time[2] = 1;
     sleeping_time[3] = 3;
     sleeping_time[4] = 1;
-*/
+
+    writing_time[0] = 3;
+    writing_time[1] = 3;
+    writing_time[2] = 2;
+    writing_time[3] = 2;
+    writing_time[4] = 3;
+
+
     pthread_t thr[N];
     int i, students_id[N];
 

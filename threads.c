@@ -14,6 +14,17 @@ void think(int student_id){
 }
 
 void check_pens(int student_id){
+    int flag = 0;
+
+    for(int i = 0; flag && i < N; i++){
+        if(i != student_id && i != i + 2 % N && states[i] != D){
+            flag = 0;
+        }
+    }
+
+    if(flag)
+        return;
+
     if(states[student_id] == D && states[LEFT] != W && states[RIGHT] != W){
         states[student_id] = W;
         display();
@@ -40,7 +51,7 @@ void writing(int student_id){
 
     sem_post(&sem_questions);
 
-    sleep(sleeping_time[student_id]);
+    sleep(writing_time[student_id]);
 }
 
 void release_pens(int student_id){

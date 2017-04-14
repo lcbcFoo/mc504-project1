@@ -1,6 +1,8 @@
 /* Implementation of the graphic-related functions */
 
 #include "graphics.h"
+#include "threads.h"
+#include <unistd.h>
 #include <ncurses.h>
 #include <stdio.h>
 
@@ -36,12 +38,39 @@ int inital_message(){
 
 void display(){
     clear();
-    printw("display haha\n");
+    printw("display\n");
+    move(5, 0);
+    /* Implementar os desenhos */
+    for(int i = 0; i < N; i++){
+        if(states[i] == W)
+            printw("W ");
+        else if(states[i] == T)
+            printw("T ");
+        else
+            printw("D ");
+    }
+
+
+    move(25, 0);
+    attron(COLOR_PAIR(1));
+    printw("Questions answered:\n\n");
+    for(int i = 0; i < N; i++){
+        printw("Student %d: %d\n", i, questions[i]);
+    }
+    printw("\n\nTotal: %d\n", total_questions);
+
     refresh();
 }
 
 void final_layout(){
+    sem_wait(&semaphore);
     clear();
-    printw("final layout xD\n");
+    attron(COLOR_PAIR(1));
+    printw("Questions answered:\n\n");
+    for(int i = 0; i < N; i++){
+        printw("Student %d: %d\n", i, questions[i]);
+    }
+    printw("\n\nTotal: %d\n", total_questions);
     refresh();
+    while(1);
 }

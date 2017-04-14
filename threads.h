@@ -11,7 +11,7 @@
 
 /* define number of students and max total writings */
 #define N 5
-#define MAX 10
+#define MAX 15
 
 #define RIGHT (student_id + 1) % N
 #define LEFT (student_id + N - 1) % N
@@ -37,6 +37,7 @@ int total_questions;
 /* Specify how long every student must sleep depending on the animation mode */
 int sleeping_time[N];
 int start_delay[N];
+int writing_time[N];
 
 
 void think(int student_id);
