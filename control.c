@@ -21,21 +21,24 @@ void start_animation(){
 }
 
 void normal_mode(){
-/*  Mudar para rodar normal
-
-
     start_delay[0] = 1;
     start_delay[1] = 0;
     start_delay[2] = 3;
     start_delay[3] = 1;
     start_delay[4] = 2;
 
-    sleeping_time[0] = 0;
-    sleeping_time[1] = 1;
-    sleeping_time[2] = 3;
+    sleeping_time[0] = 3;
+    sleeping_time[1] = 2;
+    sleeping_time[2] = 1;
     sleeping_time[3] = 3;
-    sleeping_time[4] = 1;
-*/
+    sleeping_time[4] = 4;
+
+    writing_time[0] = 3;
+    writing_time[1] = 2;
+    writing_time[2] = 3;
+    writing_time[3] = 1;
+    writing_time[4] = 2;
+
     pthread_t thr[N];
     int i, students_id[N];
 
