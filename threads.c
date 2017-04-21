@@ -24,25 +24,41 @@ void check_pens(int student_id){
 }
 
 int check_left(int student_id) {
-    if(pens[student_id] == -1){
-        pens[student_id] = student_id;
-        display();
-        sleep(1);
-        return 1;
+    if(mode != 1){
+        if(pens[student_id] == -1){
+            pens[student_id] = student_id;
+            display();
+            sleep(2);
+            return 1;
+        }
+        else if(pens[student_id] == student_id)
+            return 1;
+        return 0;
     }
-    else if(pens[student_id] == student_id)
-        return 1;
+    else{
+        if((pens[student_id] == -1) && (pens[RIGHT] == -1)){
+            pens[student_id] = student_id;
+            pens[RIGHT] = student_id;
+            display();
+            sleep(2);
+            return 1;
+        }
+    }
     return 0;
 }
 
 int check_right(int student_id){
-    if(pens[RIGHT] == -1){
-        pens[RIGHT] = student_id;
-        display();
-        sleep(1);
-        return 1;
+    if(mode != 1){
+        if(pens[RIGHT] == -1){
+            pens[RIGHT] = student_id;
+            display();
+            sleep(2);
+            return 1;
+        }
+        else
+            return 0;
     }
-    return 0;
+    return 1;
 }
 
 void pick_pens(int student_id){
@@ -76,7 +92,7 @@ void release_pens(int student_id){
 
     display();
 
-    if(mode == 0){
+    if(mode != 2){
         check_pens(LEFT);
         check_pens(RIGHT);
     }
