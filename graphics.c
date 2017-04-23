@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 #define IMAGE_ROW 5
-#define IMAGE_COLLUM 30
+#define IMAGE_COLUMN 30
 
 char arq_name[] = "image.txt";
 char arq0_name[] = "image0.txt";
@@ -83,7 +83,7 @@ void display(){
     /* Implementar os desenhos */
     for(int i = 0; i < N; i++){
         aux = 3;
-        move(3, i * IMAGE_COLLUM + aux * i);
+        move(3, i * (IMAGE_COLUMN + aux));
         if(states[i] == W)
             printw("I am writing!");
         else if(states[i] == T)
@@ -107,7 +107,7 @@ void display(){
         int aux = 0;
         for(int j = 0; j < 15; j++){
             aux = 3;
-            move(IMAGE_ROW + j, i * IMAGE_COLLUM + aux*i);
+            move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
             printw("%s", image[j]);
         }
     }
@@ -127,7 +127,7 @@ void display(){
     attron(COLOR_PAIR(1));
     for(int i = 0; i < N; i++){
         aux = 3;
-        move(23, i * IMAGE_COLLUM + aux * i + 7);
+        move(23, i * (IMAGE_COLUMN + aux) + 7);
         printw("Answers: %d", questions[i]);
     }
     move(45,0);
@@ -143,7 +143,7 @@ void final_layout(){
 
     for(int i = 0; i < N; i++){
         aux = 3;
-        move(3, i * IMAGE_COLLUM + aux * i);
+        move(3, i * (IMAGE_COLUMN + aux));
         if(questions[i])
             printw(" MOM, I PASSED!!!");
         else
@@ -158,7 +158,7 @@ void final_layout(){
 
         for(int j = 0; j < 20; j++){
             int aux = 3;
-            move(IMAGE_ROW + j, i * IMAGE_COLLUM + aux*i);
+            move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
             if(questions[i])
                 printw("%s", image10[j]);
             else
@@ -169,7 +169,7 @@ void final_layout(){
     attron(COLOR_PAIR(1));
     for(int i = 0; i < N; i++){
         aux = 3;
-        move(25, i * IMAGE_COLLUM + aux * i + 4);
+        move(25, i * (IMAGE_COLUMN + aux) + 4);
         printw("Answers: %d", questions[i]);
     }
 

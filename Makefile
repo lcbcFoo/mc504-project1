@@ -1,6 +1,6 @@
 # Makefile
 
-CC=gcc
+CC=clang
 CFLAGS=-std=c99 -Wall -pedantic -lncurses -lpthread -g
 
 

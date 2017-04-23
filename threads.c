@@ -1,4 +1,4 @@
-/* Implementation of the threads-related functions */
+/* Implementation of the thread-related functions */
 #include "threads.h"
 #include "graphics.h"
 
@@ -13,14 +13,33 @@ void think(int student_id){
     sleep(sleeping_time[student_id]);
 }
 
-void check_pens(int student_id){
-    if(states[student_id] == D && check_left(student_id) && check_right(student_id)){
-        states[student_id] = W;
-        display();
-        sem_post(&students[student_id]);
-    }
+void writing(int student_id){
+    sem_wait(&sem_questions);
+    questions[student_id]++;
+    total_questions++;
 
-    sem_post(&sem_pen);
+    if(total_questions == MAX)
+        final_layout();
+
+    sem_post(&sem_questions);
+
+    sleep(writing_time[student_id]);
+}
+
+void release_pens(int student_id){
+    sem_wait(&semaphore);
+    states[student_id] = T;
+
+    pens[RIGHT] = -1;
+    pens[student_id] = -1;
+
+    display();
+
+    if(mode < 2){
+        check_pens(LEFT);
+        check_pens(RIGHT);
+    }
+    sem_post(&semaphore);
 }
 
 int check_left(int student_id) {
@@ -35,7 +54,7 @@ int check_left(int student_id) {
             return 1;
         return 0;
     }
-    else{
+    else{ // starvation mode
         if((pens[student_id] == -1) && (pens[RIGHT] == -1)){
             pens[student_id] = student_id;
             pens[RIGHT] = student_id;
@@ -61,6 +80,19 @@ int check_right(int student_id){
     return 1;
 }
 
+void check_pens(int student_id){
+    if(states[student_id] == D &&
+      check_left(student_id) &&
+      check_right(student_id)){
+        states[student_id] = W;
+        display();
+        sem_post(&students[student_id]);
+    }
+      display();
+      sem_post(&sem_pen);
+}
+
+
 void pick_pens(int student_id){
     sem_wait(&semaphore);
     states[student_id] = D;
@@ -70,44 +102,96 @@ void pick_pens(int student_id){
     sem_wait(&students[student_id]);
 }
 
-void writing(int student_id){
-    sem_wait(&sem_questions);
-    questions[student_id]++;
-    total_questions++;
 
-    if(total_questions == MAX)
-        final_layout();
+////////////////////////////////DEADLOCK//////////////////////////////////////
 
-    sem_post(&sem_questions);
-
-    sleep(writing_time[student_id]);
-}
-
-void release_pens(int student_id){
-    sem_wait(&semaphore);
-    states[student_id] = T;
-
-    pens[RIGHT] = -1;
-    pens[student_id] = -1;
-
-    display();
-
-    if(mode != 2){
-        check_pens(LEFT);
-        check_pens(RIGHT);
+void check_pens_deadlock(int student_id){
+    if(states[student_id] == D &&
+      check_left(student_id) &&
+      check_right(student_id)){
+        states[student_id] = W;
+        display();
+        sem_post(&students[student_id]);
     }
-    sem_post(&semaphore);
+    display();
+    sem_post(&sem_pen);
 }
+
+void pick_pens_deadlock(int student_id){
+      states[student_id] = D;
+      display();
+      check_pens_deadlock(student_id);
+      sem_wait(&students[student_id]);
+}
+
+////////////////////////////////LIVELOCK//////////////////////////////////////
+
+int check_pens_livelock(int student_id){
+    if(states[student_id] == D &&
+       check_left(student_id) &&
+       check_right(student_id)){
+        return 1;
+    } else{
+        release_pens_livelock(student_id);
+        display();
+    }
+    return 0;
+}
+
+void pick_pens_livelock(int student_id){
+    states[student_id] = D;
+    display();
+    while(!check_pens_livelock(student_id));
+}
+
+void release_pens_livelock(int student_id){
+    if(pens[RIGHT] == student_id){
+      pens[RIGHT] = -1;
+    }
+    if(pens[student_id] ==  student_id){
+      pens[student_id] = -1;
+    }
+    display();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 
 void* student_function(void* v){
     int student_id = *(int *) v;
 
-    sleep(start_delay[student_id]);
 
-    while(1){
+    if(mode < 2){
+      sleep(start_delay[student_id]);
+
+      while(1){
         pick_pens(student_id);
         writing(student_id);
         release_pens(student_id);
         think(student_id);
+      }
     }
+
+    // else if(mode == 2){
+    else{
+      sleep(start_delay[student_id]);
+
+        while(1){
+            pick_pens_deadlock(student_id);
+            writing(student_id);
+            release_pens(student_id);
+            think(student_id);
+        }
+    }
+
+    // else{
+    //   sleep(start_delay[student_id]);
+    //
+    //   while(1){
+    //     pick_pens_livelock(student_id);
+    //     writing(student_id);
+    //     release_pens(student_id);
+    //     think(student_id);
+    //   }
+    // }
 }
