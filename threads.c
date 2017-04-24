@@ -44,6 +44,7 @@ void release_pens(int student_id){
 }
 
 int check_left(int student_id) {
+    /* Normal mode: Can pick only the left or right pen */
     if(mode != 1){
         if(pens[student_id] == -1){
             pens[student_id] = student_id;
@@ -52,12 +53,12 @@ int check_left(int student_id) {
             return 1;
         }
         else if(pens[student_id] == student_id)
-            // sleep(1);
-            // display();
             return 1;
         return 0;
     }
-    else{ // starvation mode
+
+    /* Starvation mode: must pick both pens at the same time */
+    else{
         if((pens[student_id] == -1) && (pens[RIGHT] == -1)){
             pens[student_id] = student_id;
             pens[RIGHT] = student_id;
@@ -83,31 +84,18 @@ int check_right(int student_id){
     return 1;
 }
 
-// void check_pens(int student_id){
-//     if(states[student_id] == D &&
-//       check_left(student_id) &&
-//       check_right(student_id)){
-//         states[student_id] = W;
-//         display();
-//         sem_post(&students[student_id]);
-//     }
-//       display();
-//       sem_post(&sem_pen);
-// }
-
-//////Tentativa
+/* Normal check pens */
 void check_pens(int student_id){
     if(states[student_id] == D){
-      check_left(student_id);
-      check_right(student_id);
-      if(pens[student_id] == student_id && pens[RIGHT] == student_id){
-        states[student_id] = W;
-        sem_post(&students[student_id]);
-      }
+        check_left(student_id);
+        check_right(student_id);
+        if(pens[student_id] == student_id && pens[RIGHT] == student_id){
+            states[student_id] = W;
+            sem_post(&students[student_id]);
+        }
     }
 
-      display();
-      sem_post(&sem_pen);
+    display();
 }
 
 
@@ -123,18 +111,18 @@ void pick_pens(int student_id){
 
 void check_pens_deadlock(int student_id){
     if(states[student_id] == D &&
-      check_left(student_id) &&
-      check_right(student_id)){
+       check_left(student_id) &&
+       check_right(student_id)){
+
         states[student_id] = W;
         display();
         sem_post(&students[student_id]);
     }
     display();
     if(++testing_time >= 4){
-      sleep(3);
-      final_layout();
+        sleep(3);
+        final_layout();
     }
-    sem_post(&sem_pen);
 }
 
 void pick_pens_deadlock(int student_id){
@@ -148,20 +136,21 @@ void pick_pens_deadlock(int student_id){
 void* student_function(void* v){
     int student_id = *(int *) v;
 
-
+    /* Starvation and normal mode */
     if(mode < 2){
-      sleep(start_delay[student_id]);
+        sleep(start_delay[student_id]);
 
-      while(1){
-        pick_pens(student_id);
-        writing(student_id);
-        release_pens(student_id);
-        think(student_id);
-      }
+        while(1){
+            pick_pens(student_id);
+            writing(student_id);
+            release_pens(student_id);
+            think(student_id);
+        }
     }
 
+    /* Deadlock */
     else{
-      sleep(start_delay[student_id]);
+        sleep(start_delay[student_id]);
 
         while(1){
             pick_pens_deadlock(student_id);
@@ -170,5 +159,4 @@ void* student_function(void* v){
             think(student_id);
         }
     }
-
 }

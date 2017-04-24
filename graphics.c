@@ -88,20 +88,21 @@ int inital_message(){
 
 
     attron(COLOR_PAIR(1));
-    mvprintw(5,0,"This is a variation of the Dinning Philosophers problem: The Problem of the Desperate Students!\n\n\nChoose which mode you want to see:\n\n");
+    mvprintw(5,0,"This is a variation of the Dinning Philosophers problem: The Problem of the Desperate Students!\n\n\n\n     Choose which mode you want to see:\n\n\n");
 
     attron(COLOR_PAIR(3));
     printw("1)");
     attron(COLOR_PAIR(1));
-    printw(" MC102 - Everybody passes! (Synchronized threads)\n");
+    printw(" MC102 - Everybody passes! (Synchronized threads)\n\n");
     attron(COLOR_PAIR(5));
     printw("2)");
     attron(COLOR_PAIR(1));
-    printw(" MC404 - Someone is left behind... (Starvation problem)\n");
+    printw(" MC404 - Someone is left behind... (Starvation problem)\n\n");
     attron(COLOR_PAIR(2));
     printw("3)");
     attron(COLOR_PAIR(1));
-    printw(" F 315 - No one shall pass! (Deadlock problem)\n");
+    printw(" MEC G - No one shall pass! (Deadlock problem)\n");
+    move(45,0);
     refresh();
 
     char get;
@@ -115,9 +116,10 @@ int inital_message(){
 }
 
 void display(){
+    sem_wait(&sem_graphics);
     clear();
     int aux = 0;
-    /* Implementar os desenhos */
+    /* Graphics implementation based on the .txt files */
     for(int i = 0; i < N; i++){
         aux = 3;
         move(3, i * (IMAGE_COLUMN + aux));
@@ -125,7 +127,7 @@ void display(){
             printw("I am writing!");
         else if(states[i] == T)
             printw("I think I know nothing .-.");
-        else if((pens[i] == i || (pens[i + 1]) % N == i))
+        else if((pens[i] == i || (pens[(i + 1) % N]) == i))
             printw("I need one more pen...");
         else
             printw("I HAVE NO PEN!!!");
@@ -134,24 +136,24 @@ void display(){
     for(int i = 0; i < N; i++){
         int aux = 0;
         if(states[i] == W){
-          attron(COLOR_PAIR(3));
-          for(int j = 0; j < 15; j++){
-              aux = 3;
-              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-              printw("%s", imageB[j]);
-          }
+            attron(COLOR_PAIR(3));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", imageB[j]);
+            }
         }
 
         else if(states[i] == T){
-          attron(COLOR_PAIR(4));
-          for(int j = 0; j < 15; j++){
-              aux = 3;
-              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-              printw("%s", image[j]);
-          }
+            attron(COLOR_PAIR(4));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", image[j]);
+            }
         }
 
-        else if(pens[i] == i && pens[i + 1] % N != i){
+        else if(pens[i] == i && pens[(i + 1) % N] != i){
             attron(COLOR_PAIR(5));
             for(int j = 0; j < 15; j++){
                 aux = 3;
@@ -159,36 +161,34 @@ void display(){
                 printw("%s", imageL[j]);
             }
         }
-        else if(pens[i + 1] % N == i && pens[i] != i){
-          attron(COLOR_PAIR(5));
-          for(int j = 0; j < 15; j++){
-              aux = 3;
-              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-              printw("%s", imageR[j]);
-          }
+        else if(pens[(i + 1) % N] == i && pens[i] != i){
+            attron(COLOR_PAIR(5));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", imageR[j]);
+            }
         }
-        else if(pens[i] == i && pens[i + 1] % N == i){
-          attron(COLOR_PAIR(3));
-          for(int j = 0; j < 15; j++){
-              aux = 3;
-              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-              printw("%s", imageB[j]);
-          }
-          move(3, i * (IMAGE_COLUMN + aux));
-          attron(COLOR_PAIR(1));
-          printw("UHUUUUUUUUUUUUUUUUUUUL!");
+        else if(pens[i] == i && pens[(i + 1) % N] == i){
+            attron(COLOR_PAIR(3));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", imageB[j]);
+            }
+            move(3, i * (IMAGE_COLUMN + aux));
+            attron(COLOR_PAIR(1));
+            printw("UHUUUUUUUUUUUUUUUUUUUL!");
 
         }
         else{
-          attron(COLOR_PAIR(2));
-          for(int j = 0; j < 15; j++){
-              aux = 3;
-              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-              printw("%s", image[j]);
-          }
+            attron(COLOR_PAIR(2));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", image[j]);
+            }
         }
-
-
     }
 
     move(27,0);
@@ -211,6 +211,7 @@ void display(){
     }
     move(45,0);
     refresh();
+    sem_post(&sem_graphics);
 }
 
 void final_layout(){

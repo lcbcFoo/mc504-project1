@@ -25,7 +25,7 @@ state_t states[N];
 /* Semaphore for picking a pen*/
 sem_t semaphore;
 
-sem_t sem_pen;
+sem_t sem_graphics;
 
 /* Semaphore for holding pens for each student */
 sem_t students[N];
