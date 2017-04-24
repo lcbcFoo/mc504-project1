@@ -1,13 +1,13 @@
 # MC504-project1 - The problem of the desperate students
 
-This is an animated representation for a variation of the problem of the Dinning Philosophers.
+This is an animated representation for a variation of the Dinning Philosophers problem.
 
 
 Authors:
 
-  Laura Politi
+  - Laura Politi - RA: 171803
 
-  Lucas de C. B. de Castro
+  - Lucas de C. B. de Castro - RA: 172678
 
 
-P.S. We tried really hard.
+P.S. Laura is an artist!
