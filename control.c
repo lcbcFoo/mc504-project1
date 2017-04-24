@@ -41,7 +41,7 @@ void start_mode(){
 
 
 void define_mode_times(){
-    if(mode == 0){
+    if(mode == 0){ //regular mode - just some random times
         start_delay[0] = 2;
         start_delay[1] = 12;
         start_delay[2] = 2;
@@ -61,7 +61,7 @@ void define_mode_times(){
         writing_time[4] = 2;
     }
 
-    else if(mode == 1){
+    else if(mode == 1){ // starvation mode - times to induce starvation
         start_delay[0] = 2;
         start_delay[1] = 1;
         start_delay[2] = 6;
@@ -81,7 +81,7 @@ void define_mode_times(){
         writing_time[4] = 6;
     }
 
-    else{
+    else{ // deadlock mode - times to induce deadlock on first try
         start_delay[0] = 1;
         start_delay[1] = 2;
         start_delay[2] = 3;
