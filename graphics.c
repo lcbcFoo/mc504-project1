@@ -13,10 +13,16 @@
 char arq_name[] = "image.txt";
 char arq0_name[] = "image0.txt";
 char arq10_name[] = "image10.txt";
+char arqL_name[] = "image_left.txt";
+char arqR_name[] = "image_right.txt";
+char arqB_name[] = "image_both.txt";
 
 char image[15][30];
 char image0[20][30];
 char image10[20][30];
+char imageL[15][30];
+char imageR[15][30];
+char imageB[15][30];
 
 
 int inital_message(){
@@ -50,28 +56,59 @@ int inital_message(){
     while(fgets(image10[i++], sizeof(image10), arq));
     fclose(arq);
 
+    /* Read image file */
+    arq = fopen(arqL_name, "r");
+
+    if(arq == NULL)
+        exit(0);
+
+    i = 0;
+    while(fgets(imageL[i++], sizeof(imageL), arq));
+    fclose(arq);
+
+    /* Read image file */
+    arq = fopen(arqR_name, "r");
+
+    if(arq == NULL)
+        exit(0);
+
+    i = 0;
+    while(fgets(imageR[i++], sizeof(imageR), arq));
+    fclose(arq);
+
+    /* Read image file */
+    arq = fopen(arqB_name, "r");
+
+    if(arq == NULL)
+        exit(0);
+
+    i = 0;
+    while(fgets(imageB[i++], sizeof(imageB), arq));
+    fclose(arq);
+
+
     attron(COLOR_PAIR(1));
-    mvprintw(5,0,"This is the Desperate Students (a variation of the dinning philosophers problem) animation!\n\nChoose which mode you want to see:\n\n");
+    mvprintw(5,0,"This is a variation of the Dinning Philosophers problem: The Problem of the Desperate Students!\n\n\nChoose which mode you want to see:\n\n");
 
     attron(COLOR_PAIR(3));
     printw("1)");
     attron(COLOR_PAIR(1));
-    printw(" MC 102 - Everybody passes! (Synchronized threads)\n");
+    printw(" MC102 - Everybody passes! (Synchronized threads)\n");
     attron(COLOR_PAIR(5));
     printw("2)");
     attron(COLOR_PAIR(1));
-    printw(" MC 404 - Someone is left behind... (Starvation problem)\n");
+    printw(" MC404 - Someone is left behind... (Starvation problem)\n");
     attron(COLOR_PAIR(2));
     printw("3)");
     attron(COLOR_PAIR(1));
-    printw(" MC X58 - No one shall pass! (Deadlock problem)\n");
+    printw(" F 315 - No one shall pass! (Deadlock problem)\n");
     refresh();
 
     char get;
 
     do{
         scanf(" %c", &get);
-    }while(get > '3' || get < '1');
+    }while(get > '4' || get < '1');
 
     clear();
     return (int) get - '1';
@@ -95,21 +132,62 @@ void display(){
     }
 
     for(int i = 0; i < N; i++){
-        if(states[i] == W)
-            attron(COLOR_PAIR(3));
-        else if(states[i] == T)
-            attron(COLOR_PAIR(4));
-        else if(pens[i] == i || (pens[i + 1]) % N == i)
-            attron(COLOR_PAIR(5));
-        else
-            attron(COLOR_PAIR(2));
-
         int aux = 0;
-        for(int j = 0; j < 15; j++){
-            aux = 3;
-            move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
-            printw("%s", image[j]);
+        if(states[i] == W){
+          attron(COLOR_PAIR(3));
+          for(int j = 0; j < 15; j++){
+              aux = 3;
+              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+              printw("%s", imageB[j]);
+          }
         }
+
+        else if(states[i] == T){
+          attron(COLOR_PAIR(4));
+          for(int j = 0; j < 15; j++){
+              aux = 3;
+              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+              printw("%s", image[j]);
+          }
+        }
+
+        else if(pens[i] == i && pens[i + 1] % N != i){
+            attron(COLOR_PAIR(5));
+            for(int j = 0; j < 15; j++){
+                aux = 3;
+                move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+                printw("%s", imageL[j]);
+            }
+        }
+        else if(pens[i + 1] % N == i && pens[i] != i){
+          attron(COLOR_PAIR(5));
+          for(int j = 0; j < 15; j++){
+              aux = 3;
+              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+              printw("%s", imageR[j]);
+          }
+        }
+        else if(pens[i] == i && pens[i + 1] % N == i){
+          attron(COLOR_PAIR(3));
+          for(int j = 0; j < 15; j++){
+              aux = 3;
+              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+              printw("%s", imageB[j]);
+          }
+          move(3, i * (IMAGE_COLUMN + aux));
+          printw("UHUUUUUUUUUUUUUUUUUUUL!");
+
+        }
+        else{
+          attron(COLOR_PAIR(2));
+          for(int j = 0; j < 15; j++){
+              aux = 3;
+              move(IMAGE_ROW + j, i * (IMAGE_COLUMN + aux));
+              printw("%s", image[j]);
+          }
+        }
+
+
     }
 
     move(27,0);

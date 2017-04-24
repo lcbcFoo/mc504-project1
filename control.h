@@ -8,6 +8,6 @@ void define_mode_times();
 
 void start_animation();
 
-void normal_mode();
+void start_mode();
 
-void deadlock_mode();
+// void deadlock_mode();

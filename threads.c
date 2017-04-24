@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <semaphore.h>
 
+int testing_time = 0;
 
 void think(int student_id){
     sleep(sleeping_time[student_id]);
@@ -51,6 +52,8 @@ int check_left(int student_id) {
             return 1;
         }
         else if(pens[student_id] == student_id)
+            // sleep(1);
+            // display();
             return 1;
         return 0;
     }
@@ -58,8 +61,8 @@ int check_left(int student_id) {
         if((pens[student_id] == -1) && (pens[RIGHT] == -1)){
             pens[student_id] = student_id;
             pens[RIGHT] = student_id;
+            sleep(1);
             display();
-            sleep(2);
             return 1;
         }
     }
@@ -71,7 +74,7 @@ int check_right(int student_id){
         if(pens[RIGHT] == -1){
             pens[RIGHT] = student_id;
             display();
-            sleep(2);
+            sleep(1);
             return 1;
         }
         else
@@ -80,14 +83,29 @@ int check_right(int student_id){
     return 1;
 }
 
+// void check_pens(int student_id){
+//     if(states[student_id] == D &&
+//       check_left(student_id) &&
+//       check_right(student_id)){
+//         states[student_id] = W;
+//         display();
+//         sem_post(&students[student_id]);
+//     }
+//       display();
+//       sem_post(&sem_pen);
+// }
+
+//////Tentativa
 void check_pens(int student_id){
-    if(states[student_id] == D &&
-      check_left(student_id) &&
-      check_right(student_id)){
+    if(states[student_id] == D){
+      check_left(student_id);
+      check_right(student_id);
+      if(pens[student_id] == student_id && pens[RIGHT] == student_id){
         states[student_id] = W;
-        display();
         sem_post(&students[student_id]);
+      }
     }
+
       display();
       sem_post(&sem_pen);
 }
@@ -103,8 +121,6 @@ void pick_pens(int student_id){
 }
 
 
-////////////////////////////////DEADLOCK//////////////////////////////////////
-
 void check_pens_deadlock(int student_id){
     if(states[student_id] == D &&
       check_left(student_id) &&
@@ -114,6 +130,10 @@ void check_pens_deadlock(int student_id){
         sem_post(&students[student_id]);
     }
     display();
+    if(++testing_time >= 4){
+      sleep(3);
+      final_layout();
+    }
     sem_post(&sem_pen);
 }
 
@@ -123,38 +143,6 @@ void pick_pens_deadlock(int student_id){
       check_pens_deadlock(student_id);
       sem_wait(&students[student_id]);
 }
-
-////////////////////////////////LIVELOCK//////////////////////////////////////
-
-int check_pens_livelock(int student_id){
-    if(states[student_id] == D &&
-       check_left(student_id) &&
-       check_right(student_id)){
-        return 1;
-    } else{
-        release_pens_livelock(student_id);
-        display();
-    }
-    return 0;
-}
-
-void pick_pens_livelock(int student_id){
-    states[student_id] = D;
-    display();
-    while(!check_pens_livelock(student_id));
-}
-
-void release_pens_livelock(int student_id){
-    if(pens[RIGHT] == student_id){
-      pens[RIGHT] = -1;
-    }
-    if(pens[student_id] ==  student_id){
-      pens[student_id] = -1;
-    }
-    display();
-}
-
-//////////////////////////////////////////////////////////////////////////////
 
 
 void* student_function(void* v){
@@ -172,7 +160,6 @@ void* student_function(void* v){
       }
     }
 
-    // else if(mode == 2){
     else{
       sleep(start_delay[student_id]);
 
@@ -184,14 +171,4 @@ void* student_function(void* v){
         }
     }
 
-    // else{
-    //   sleep(start_delay[student_id]);
-    //
-    //   while(1){
-    //     pick_pens_livelock(student_id);
-    //     writing(student_id);
-    //     release_pens(student_id);
-    //     think(student_id);
-    //   }
-    // }
 }

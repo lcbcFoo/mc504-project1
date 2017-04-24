@@ -9,19 +9,11 @@
 void start_animation(){
     mode = inital_message();
     define_mode_times();
-    if(mode == 0)
-        normal_mode();
-    else if(mode == 1)
-        normal_mode();
-    else if(mode == 2)
-        deadlock_mode();
-    else
-        deadlock_mode();
-
+    start_mode();
     refresh();
 }
 
-void normal_mode(){
+void start_mode(){
 
     pthread_t thr[N];
     int i, students_id[N];
@@ -30,6 +22,7 @@ void normal_mode(){
     sem_init(&sem_questions, 0, 1);
     sem_init(&sem_pen, 0, 1);
     total_questions = 0;
+
     for (i = 0; i < N; i++) {
         pens[i] = -1;
         students_id[i] = i;
@@ -37,34 +30,7 @@ void normal_mode(){
         states[i] = T;
         questions[i] = 0;
     }
-
-    display();
-
-    for (i = 0; i < N; i++)
-        pthread_create(&thr[i], NULL, student_function, (void*) &students_id[i]);
-
-    for (i = 0; i < N; i++)
-        pthread_join(thr[i], NULL);
-}
-
-
-void deadlock_mode(){
-
-    pthread_t thr[N];
-    int i, students_id[N];
-
-    sem_init(&semaphore, 0, 1);
-    sem_init(&sem_questions, 0, 1);
-    sem_init(&sem_pen, 0, 1);
-    total_questions = 0;
-    for (i = 0; i < N; i++) {
-        pens[i] = -1;
-        students_id[i] = i;
-        sem_init(&students[i], 0, 0);
-        states[i] = T;
-        questions[i] = 0;
-    }
-
+    
     display();
 
     for (i = 0; i < N; i++)
@@ -118,10 +84,10 @@ void define_mode_times(){
 
   else{
     start_delay[0] = 1;
-    start_delay[1] = 3;
-    start_delay[2] = 5;
-    start_delay[3] = 7;
-    start_delay[4] = 9;
+    start_delay[1] = 2;
+    start_delay[2] = 3;
+    start_delay[3] = 4;
+    start_delay[4] = 5;
 
     sleeping_time[0] = 6;
     sleeping_time[1] = 1;

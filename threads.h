@@ -34,7 +34,6 @@ sem_t students[N];
 sem_t sem_questions;
 
 /* 0 if pen is free, 1 if pen is being used */
-int testing_time;
 int pens[N];
 int mode;
 
@@ -49,23 +48,21 @@ int writing_time[N];
 
 
 void think(int student_id);
+
 void writing(int student_id);
+
 void release_pens(int student_id);
+
 int check_left(int student_id);
+
 int check_right(int student_id);
 
 void check_pens(int student_id);
+
 void pick_pens(int student_id);
 
-void check_pens_starvation(int student_id);
-int check_sides_starvation(int student_id);
-void pick_pens_starvation(int student_id);
-
 void check_pens_deadlock(int student_id);
-void pick_pens_deadlock(int student_id);
 
-int check_pens_livelock(int student_id);
-void pick_pens_livelock(int student_id);
-void release_pens_livelock(int student_id);
+void pick_pens_deadlock(int student_id);
 
 void* student_function(void* v);
