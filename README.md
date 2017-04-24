@@ -18,16 +18,16 @@ on their test, but they could share the pen with the person on their left or
 their right when the pen was not being used. He, then, placed the desks in a circle, 
 so every student would have someone on their left and right.
 
-Possible outcomes:
+Possible outcomes
 
-- Regular mode
+- Regular mode: 
 	The students did a really good job sharing the pens and everyone got a 
 	chance to answer some questions.
 
-- Starvation mode
+- Starvation mode: 
 	One or more students didn't get a chance to pick up two pens at the same 
 	time and, therefore, failed the test.
 
-- Deadlock mode
+- Deadlock mode: 
 	They were not successful in sharing their pens, so no one got two pens at 
 	the same time and everyone failed.
