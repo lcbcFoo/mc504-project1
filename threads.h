@@ -25,6 +25,7 @@ state_t states[N];
 /* Semaphore for picking a pen*/
 sem_t semaphore;
 
+/* Semaphore to avoid "printing overlap"*/
 sem_t sem_graphics;
 
 /* Semaphore for holding pens for each student */
