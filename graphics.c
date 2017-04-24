@@ -175,6 +175,7 @@ void display(){
               printw("%s", imageB[j]);
           }
           move(3, i * (IMAGE_COLUMN + aux));
+          attron(COLOR_PAIR(1));
           printw("UHUUUUUUUUUUUUUUUUUUUL!");
 
         }
