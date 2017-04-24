@@ -9,5 +9,3 @@ Authors:
 
   - Lucas de C. B. de Castro - RA: 172678
 
-
-P.S. Laura is an artist!
